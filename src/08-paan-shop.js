@@ -45,18 +45,59 @@
  *   createPaanOrder({type:"meetha"}, {extra:"gulkand"}) // => {type:"meetha",extra:"gulkand"}
  *   updatePrices({meetha:30, saada:20}, 10)              // => {meetha:40, saada:30}
  */
+// ... (keeping comments)
 export function createPaanOrder(basePaan, customizations) {
-  // Your code here
+  // Check if basePaan is a valid object
+  if (typeof basePaan !== "object" || basePaan === null || Array.isArray(basePaan)) {
+    return {};
+  }
+
+  // If customizations is not a valid object, return a SHALLOW COPY of basePaan
+  if (typeof customizations !== "object" || customizations === null || Array.isArray(customizations)) {
+    return { ...basePaan }; // or Object.assign({}, basePaan)
+  }
+
+  // Otherwise, return a new merged object (don't mutate basePaan!)
+  return Object.assign({}, basePaan, customizations);
 }
 
 export function freezeMenu(menu) {
-  // Your code here
+  // Check if menu is a valid object
+  if (typeof menu !== "object" || menu === null || Array.isArray(menu)) {
+    return {};
+  }
+  return Object.freeze(menu);
 }
 
 export function updatePrices(menu, increase) {
-  // Your code here
+  // Check if menu is a valid object
+  if (typeof menu !== "object" || menu === null || Array.isArray(menu)) {
+    return {};
+  }
+
+  // Check if increase is a number
+  if (typeof increase !== 'number') {
+    return {};
+  }
+
+  // Logic: Use Object.entries -> map -> Object.fromEntries
+  const entries = Object.entries(menu);
+
+  const updatedEntries = entries.map(([item, price]) => {
+    return [item, price + increase];
+  });
+
+  return Object.fromEntries(updatedEntries);
 }
 
 export function mergeDailySpecials(regularMenu, specialsMenu) {
-  // Your code here
+  // Helper to validate if something is a plain object
+  const isObject = (obj) => typeof obj === 'object' && obj !== null && !Array.isArray(obj);
+
+  // If inputs are not objects, treat them as empty objects
+  const regular = isObject(regularMenu) ? regularMenu : {};
+  const specials = isObject(specialsMenu) ? specialsMenu : {};
+
+  // Spread entries to merge
+  return { ...regular, ...specials };
 }
