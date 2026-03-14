@@ -59,8 +59,13 @@
  */
 export function getDataType(value) {
   // Your code here
-  if (typeof null === "object") return "null"
-  if (typeof [] === "object") return "array";
+  if (value === null) {
+    return "null";
+  }
+
+  if (Array.isArray(value)) {
+    return "array";
+  }
   return typeof value;
 }
 
@@ -84,6 +89,5 @@ export function isNotANumber(value) {
 
 export function isTruthy(value) {
   // Your code here
-  if (typeof value !== "number" || !Number.isNaN(value)) return false;
-  return true;
+  return Boolean(value);
 }
